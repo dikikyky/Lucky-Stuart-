@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lucky Stuart</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1211;--card:#171c1b;--line:#27312f;--ink:#eaf1ee;--muted:#8fa09a;--ok:#34d399;--ok-ink:#06251a;--gold:#f5b83d;--red:#f0716b;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef3f1;--card:#fff;--line:#d3ddd9;--ink:#12201b;--muted:#5b6d66;--ok:#0f9d6b;--ok-ink:#fff;--gold:#a8700a;--red:#c0392f}}
+:root[data-theme="light"]{--bg:#eef3f1;--card:#fff;--line:#d3ddd9;--ink:#12201b;--muted:#5b6d66;--ok:#0f9d6b;--ok-ink:#fff;--gold:#a8700a;--red:#c0392f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.35}
+.wrap{max-width:640px;margin:0 auto;padding:0 16px 24px}
+h1{font-size:24px;font-weight:800;margin:18px 0 12px;letter-spacing:-.02em}
+h2{font-size:20px;font-weight:800;margin:26px 0 12px}
+.row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px;scrollbar-width:none}
+.row::-webkit-scrollbar{display:none}
+.row>*{scroll-snap-align:start;flex:none}
+.slide{width:88%;min-height:150px;border-radius:16px;padding:18px;display:flex;flex-direction:column;justify-content:space-between}
+.slide b{font-size:28px;font-weight:800;line-height:1.05}
+.slide small{opacity:.85;font-size:13px}
+.codebtn{align-self:flex-start;border:2px dashed currentColor;background:transparent;color:inherit;border-radius:10px;padding:8px 14px;font:inherit;font-weight:800;font-size:18px;letter-spacing:.05em;cursor:pointer}
+.s1{background:linear-gradient(135deg,#5b1e8a,#c2417d);color:#fff}
+.s2{background:linear-gradient(135deg,#0b5d4b,#1fa37a);color:#fff}
+.s3{background:linear-gradient(135deg,#8a3b12,#e0902d);color:#fff}
+.top{width:218px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;position:relative;text-align:center}
+.rank{position:absolute;left:10px;top:10px;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:13px;background:var(--gold);color:#1a1200}
+.rate{position:absolute;right:10px;top:10px;font-size:13px;color:var(--gold);font-weight:600}
+.logo{width:64px;height:64px;border-radius:16px;margin:16px auto 8px;display:grid;place-items:center;font-size:28px;font-weight:800;color:#fff}
+.name{font-size:17px;font-weight:800;margin:0 0 8px}
+.chips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.chip{font-size:13px;font-weight:600;border-radius:8px;padding:4px 8px}
+.fs{background:rgba(245,184,61,.15);color:var(--gold)}
+.bn{background:rgba(240,113,107,.14);color:var(--red)}
+.play{display:block;width:100%;border:0;border-radius:12px;background:var(--ok);color:var(--ok-ink);font:inherit;font-weight:800;font-size:15px;padding:11px;text-align:center;text-decoration:none;cursor:pointer}
+.play:focus-visible,.codebtn:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.feat{width:70%;min-height:150px;border-radius:16px;padding:14px;display:flex;flex-direction:column;justify-content:space-between;color:#fff}
+.feat .badge{align-self:flex-end;background:#ffd23f;color:#2a2000;font-weight:800;font-size:12px;border-radius:8px;padding:3px 8px}
+.feat b{font-size:19px}
+.feat .play{background:#fff;color:#222;width:auto;align-self:flex-start;padding:8px 18px}
+.list{display:grid;gap:10px}
+.item{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.item .logo{margin:0;width:48px;height:48px;font-size:20px;border-radius:12px;position:relative}
+.item .rank{left:-6px;top:-6px;width:22px;height:22px;font-size:11px}
+.item .name{margin:0 0 6px;font-size:16px}
+.item .chips{justify-content:flex-start;margin:0}
+.item .play{width:auto;padding:10px 16px}
+.join{margin-top:24px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:800}
+.join .play{width:auto;padding:10px 16px;background:linear-gradient(135deg,#8b5cf6,#5b3df5);color:#fff}
+footer{margin-top:26px;color:var(--muted);font-size:12px;text-align:center}
+footer .age{display:inline-grid;place-items:center;width:40px;height:40px;border:1px solid var(--line);border-radius:50%;margin-bottom:8px;font-weight:800;color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.2s}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Lucky Stuart</h1>
+  <div class="row" id="banners"></div>
+  <h2>Лучшие предложения</h2>
+  <div class="row" id="top"></div>
+  <div class="row" id="featured" style="margin-top:14px"></div>
+  <h2>Народный топ</h2>
+  <div class="list" id="list"></div>
+  <div class="join"><span>Канал с бонусами</span><a class="play" id="chan" href="#" target="_blank" rel="noopener">Подписаться</a></div>
+  <footer>
+    <span class="age">18+</span>
+    <p>Страница содержит рекламу азартных игр и партнёрские ссылки: мы получаем вознаграждение, если вы регистрируетесь у операторов. Азартные игры связаны с риском потери денег и зависимостью. Играйте только у лицензированных операторов там, где это разрешено законом.</p>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status">Промокод скопирован</div>
+<script>
+// ===== ВАШИ ДАННЫЕ (замените примеры) =====
+const CHANNEL_URL = "#";
+const BANNERS = [
+  {cls:"s1", title:"50 фриспинов", sub:"Казино Пример 1", code:"PROMO50"},
+  {cls:"s2", title:"+100% к депозиту", sub:"Казино Пример 2", code:"START100"},
+  {cls:"s3", title:"Кэшбэк 10%", sub:"Казино Пример 3", code:"CASH10"}
+];
+const CASINOS = [
+  {name:"Казино Пример 1", rating:5, fs:"250 FS", bonus:"до 1000 €", color:"#d4a017", url:"#"},
+  {name:"Казино Пример 2", rating:5, fs:"250 FS", bonus:"до 750 €", color:"#3b6fd4", url:"#"},
+  {name:"Казино Пример 3", rating:5, fs:"200 FS", bonus:"до 600 €", color:"#c2417d", url:"#"},
+  {name:"Казино Пример 4", rating:4.8, fs:"150 FS", bonus:"до 500 €", color:"#1fa37a", url:"#"},
+  {name:"Казино Пример 5", rating:4.7, fs:"100 FS", bonus:"до 400 €", color:"#8b5cf6", url:"#"},
+  {name:"Казино Пример 6", rating:4.6, fs:"100 FS", bonus:"до 300 €", color:"#e0702d", url:"#"}
+];
+const FEATURED = [
+  {badge:"Лучшее", name:"Казино Пример 1", text:"1500 € + 250 FS", bg:"linear-gradient(135deg,#e11d48,#be123c)", url:"#"},
+  {badge:"Новое", name:"Казино Пример 7", text:"2500 € + 250 FS", bg:"linear-gradient(135deg,#0f9d6b,#0b6b4c)", url:"#"}
+];
+// ==========================================
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const logo = c => `<div class="logo" style="background:${c.color}">${esc(c.name.slice(-1))}</div>`;
+
+$("banners").innerHTML = BANNERS.map(b => `
+  <div class="slide ${b.cls}"><div><small>${esc(b.sub)}</small><br><b>${esc(b.title)}</b></div>
+  <button class="codebtn" data-code="${esc(b.code)}">${esc(b.code)}</button></div>`).join("");
+
+$("top").innerHTML = CASINOS.slice(0,3).map((c,i) => `
+  <div class="top"><span class="rank">${i+1}</span><span class="rate">★ ${c.rating}</span>${logo(c)}
+  <p class="name">${esc(c.name)}</p>
+  <div class="chips"><span class="chip fs">${esc(c.fs)}</span><span class="chip bn">${esc(c.bonus)}</span></div>
+  <a class="play" href="${esc(c.url)}" target="_blank" rel="noopener sponsored">Играть</a></div>`).join("");
+
+$("featured").innerHTML = FEATURED.map(f => `
+  <div class="feat" style="background:${f.bg}"><span class="badge">${esc(f.badge)}</span>
+  <div><b>${esc(f.name)}</b><br><small>${esc(f.text)}</small></div>
+  <a class="play" href="${esc(f.url)}" target="_blank" rel="noopener sponsored">Играть</a></div>`).join("");
+
+$("list").innerHTML = CASINOS.map((c,i) => `
+  <div class="item"><div class="logo" style="background:${c.color}"><span class="rank">${i+1}</span>${esc(c.name.slice(-1))}</div>
+  <div><p class="name">${esc(c.name)} <span style="color:var(--gold);font-size:13px">★ ${c.rating}</span></p>
+  <div class="chips"><span class="chip fs">${esc(c.fs)}</span><span class="chip bn">${esc(c.bonus)}</span></div></div>
+  <a class="play" href="${esc(c.url)}" target="_blank" rel="noopener sponsored">Играть</a></div>`).join("");
+
+$("chan").href = CHANNEL_URL;
+document.addEventListener("click", async e => {
+  const b = e.target.closest(".codebtn"); if(!b) return;
+  try { await navigator.clipboard.writeText(b.dataset.code); } catch(_) {}
+  const t = $("toast"); t.classList.add("on"); setTimeout(() => t.classList.remove("on"), 1600);
+});
+try { const tg = window.Telegram && window.Telegram.WebApp;
+  if (tg) { tg.ready(); tg.expand(); document.documentElement.dataset.theme = tg.colorScheme; } } catch(_) {}
+</script>
+</body>
+</html>
